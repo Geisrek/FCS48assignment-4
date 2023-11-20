@@ -58,6 +58,21 @@ class Queue:
         return self.queue[0]
     def peekLast(self):
         return self.queue[len(self.queue)-1]
+class Stack:
+    def __init__(self):
+        self.Stack=[]
+    def isEmpty(self):
+        return len(self.Stack)==0
+    def add(self,val):
+        self.Stack.append(val)
+    def POP(self):
+        if not self.isEmpty():
+            return self.Stack.pop()
+        return
+    def peekFirst(self):
+        return self.Stack[0]
+    def peekLast(self):
+        return self.Stack[len(self.Stack)-1]
 queue=Queue()
 queue.enqueue(1)
 queue.enqueue(2)
@@ -66,3 +81,10 @@ queue.enqueue(4)
 while not queue.isEmpty():
     print(queue.dequeue())
 print(queue.isEmpty())
+stack=Stack()
+stack.add(1)
+stack.add(2)
+stack.add(3)
+stack.add(4)
+while not stack.isEmpty():
+    print(stack.POP())
