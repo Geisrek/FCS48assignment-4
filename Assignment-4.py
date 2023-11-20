@@ -46,12 +46,15 @@ link.displayList()"""
 class Queue:
     def __init__(self):
         self.queue=[]
+        self.size=0
     def isEmpty(self):
         return len(self.queue)==0
     def enqueue(self,val):
+        self.size+=1
         self.queue.append(val)
     def dequeue(self):
         if not self.isEmpty():
+         self.size-=1
          return self.queue.pop(0)
         return
     def peekFirst(self):
@@ -61,12 +64,15 @@ class Queue:
 class Stack:
     def __init__(self):
         self.Stack=[]
+        self.size=0
     def isEmpty(self):
         return len(self.Stack)==0
     def add(self,val):
         self.Stack.append(val)
+        self.size+=1
     def POP(self):
         if not self.isEmpty():
+            self.size-=1
             return self.Stack.pop()
         return
     def peekFirst(self):
@@ -74,17 +80,17 @@ class Stack:
     def peekLast(self):
         return self.Stack[len(self.Stack)-1]
 queue=Queue()
-queue.enqueue(1)
-queue.enqueue(2)
-queue.enqueue(3)
-queue.enqueue(4)
+queue.enqueue('b')
+queue.enqueue('n')
+queue.enqueue('a')
+queue.enqueue('n')
 while not queue.isEmpty():
     print(queue.dequeue())
 print(queue.isEmpty())
 stack=Stack()
-stack.add(1)
-stack.add(2)
-stack.add(3)
-stack.add(4)
+stack.add('n')
+stack.add('a')
+stack.add('n')
+stack.add('b')
 while not stack.isEmpty():
     print(stack.POP())
