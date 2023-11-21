@@ -79,7 +79,7 @@ class Stack:
         return self.Stack[0]
     def peekLast(self):
         return self.Stack[len(self.Stack)-1]
-queue=Queue()
+"""queue=Queue()
 queue.enqueue('b')
 queue.enqueue('n')
 queue.enqueue('a')
@@ -93,4 +93,104 @@ stack.add('a')
 stack.add('n')
 stack.add('b')
 while not stack.isEmpty():
-    print(stack.POP())
+    print(stack.POP())"""
+#3
+class Student:
+    def __init__(self,name,final,midterm,personalety):
+        self.name=name
+        self.final=final
+        self.midterm=midterm
+        self.personalety=personalety
+        self.next=None
+class PriorestyQueue:
+    def __init__(self):
+        self.head=None
+    def isEmpty(self):
+        return self.head==None
+    def enQueue(self,student):
+        if self.isEmpty():
+            self.head=student
+        else:
+            current=self.head
+            preve=None
+            while preve==None and current!=None:
+                if student.personalety:
+                    print(4)
+                    if student.final>current.final:
+                        preve=current
+                        current=student
+                        current.next=preve
+                        
+                    elif student.final==current.final:
+                        print(3)
+                        if student.midterm>=current.midterm :
+                            preve=current
+                            current=student
+                            current.next=preve
+                        else:
+                            if current.next!=None and not current.next.personalety:
+                                preve=current.next
+                                student.next=preve
+                                current.next=student
+                            elif current.next==None:
+                                prive=student
+                                current.next=student
+                                current=None
+                    else:
+                        if current.next!=None and not current.next.personalety:
+                            preve=current.next
+                            student.next=preve
+                            current.next=student
+                        elif current.next==None:
+                            prive=student
+                            current.next=student
+                            current=None
+                else:
+                    if current.next==None:
+                        prive=student
+                        current.next=student
+                        current=None
+                if current!=None:
+                   current=current.next
+            
+    def deQueue(self):
+        if not self.isEmpty():
+            preve=self.head
+            self.head=self.head.next
+            return f"{preve.name},{preve.final},{preve.midterm},{preve.personalety}"
+        return
+        
+                        
+PQueue=PriorestyQueue()
+
+PQueue.enQueue(Student('Rafik',90,90,True))             
+PQueue.enQueue(Student('Rawan',90,60,True))  
+PQueue.enQueue(Student('Radwan',100,100,False)) 
+PQueue.enQueue(Student('Fred',80,90,True)) 
+PQueue.enQueue(Student('Karim',90,100,True)) 
+PQueue.enQueue(Student('Ali',90,30,True))
+PQueue.enQueue(Student('Walid',40,40,True))
+while not PQueue.isEmpty():
+     print(PQueue.deQueue())           
+                            
+#4
+#infix="1+(3*(4/2))+1+(2*7)*(10/(2-2))"
+infix="1+1*2*3"
+i=0
+count=0
+st=''
+l=[]
+while i<len(infix):
+    if infix[i]=='(':
+        count+=1
+    elif infix[i]==')':
+        count-=1
+    if count>=1:
+        st+=infix[i]
+    elif count==0 and i>1:
+        st+=infix[i]
+        l.append(st)
+        st=''
+    i+=1
+    print(count)
+print(l)
