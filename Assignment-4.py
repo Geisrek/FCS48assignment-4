@@ -102,7 +102,7 @@ class Student:
         self.midterm=midterm
         self.personalety=personalety
         self.next=None
-class PriorestyQueue:
+class PriorestyQueueStudents:
     def __init__(self):
         self.head=None
     def isEmpty(self):
@@ -161,7 +161,7 @@ class PriorestyQueue:
             return f"{preve.name},{preve.final},{preve.midterm},{preve.personalety}"
         return
             
-"""PQueue=PriorestyQueue()
+"""PQueue=PriorestyQueueStudents()
 
 PQueue.enQueue(Student('Rafik',90,90,True))             
 PQueue.enQueue(Student('Rawan',90,60,True))  
@@ -175,6 +175,37 @@ while not PQueue.isEmpty():
      
                             
 #4
+class PriorityQueue:
+    def __init__(self):
+        self.head=None
+    def isEmpty(self):
+        return self.head==None
+    def enQueue(self,item):
+        new_item=Node(item)
+        if self.isEmpty() or new_item.Data>self.head.Data:
+            new_item.next=self.head
+            self.head=new_item
+        else:
+            current=self.head
+            while current.next and current.next.Data>=new_item.Data:
+                current=current.next
+            new_item.next=current.next
+            current.next=new_item
+    def deQueue(self):
+        if not self.isEmpty():
+            output=self.head.Data
+            self.head=self.head.next
+            return output
+        return
+PQ=PriorityQueue()
+PQ.enQueue(3)
+PQ.enQueue(1)
+PQ.enQueue(-3)
+PQ.enQueue(10)
+PQ.enQueue(0)
+while not PQ.isEmpty():
+    print(PQ.deQueue())
+                
 def Calculate(n1,op,n2):
     if not (n1+n2).isalnum():
         return
