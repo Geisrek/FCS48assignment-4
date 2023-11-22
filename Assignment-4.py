@@ -107,6 +107,7 @@ class PriorestyQueue:
         self.head=None
     def isEmpty(self):
         return self.head==None
+    #O(n)
     def enQueue(self,student):
         if self.isEmpty():
             self.head=student
@@ -159,9 +160,8 @@ class PriorestyQueue:
             self.head=self.head.next
             return f"{preve.name},{preve.final},{preve.midterm},{preve.personalety}"
         return
-        
-                        
-PQueue=PriorestyQueue()
+            
+"""PQueue=PriorestyQueue()
 
 PQueue.enQueue(Student('Rafik',90,90,True))             
 PQueue.enQueue(Student('Rawan',90,60,True))  
@@ -171,26 +171,60 @@ PQueue.enQueue(Student('Karim',90,100,True))
 PQueue.enQueue(Student('Ali',90,30,True))
 PQueue.enQueue(Student('Walid',40,40,True))
 while not PQueue.isEmpty():
-     print(PQueue.deQueue())           
+     print(PQueue.deQueue())     """ 
+     
                             
 #4
-#infix="1+(3*(4/2))+1+(2*7)*(10/(2-2))"
-infix="1+1*2*3"
-i=0
-count=0
-st=''
-l=[]
-while i<len(infix):
-    if infix[i]=='(':
-        count+=1
-    elif infix[i]==')':
-        count-=1
-    if count>=1:
-        st+=infix[i]
-    elif count==0 and i>1:
-        st+=infix[i]
-        l.append(st)
-        st=''
-    i+=1
-    print(count)
+def Calculate(n1,op,n2):
+    if not (n1+n2).isalnum():
+        return
+    if op=="*":
+        return eval(n1)*eval(n2)
+    elif op=="/":
+        return eval(n1)/eval(n2)
+    elif op=="+":
+        return eval(n1)+eval(n2)
+    elif op=="-":
+        return eval(n1)-eval(n2)
+    else:
+        print("This operation is not exist")
+        return -1
+print(Calculate('7', "+", '2'))
+infix="1+(3*(4/2))+1+(2*7)*(10/(2-2))"
+
+bracket="(1+(2*2)/(1+1)*1)"
+operations=bracket.split(")")
+
+print(operations)
+def getLastOne(s):
+    if s.find('(')==-1 and s.find(')'):
+        return s
+    return getLastOne(s[1:-1])
+print(getLastOne(bracket))
+def splitop(infix):
+    i=0
+    count=0
+    st=''
+    l=[]
+    while i<len(infix):
+        if infix[i]=='(':
+            count+=1
+        elif infix[i]==')':
+            count-=1
+        if count>=1:
+            st+=infix[i]
+        elif count==0 :
+            st+=infix[i]
+            l.append(st)
+            st=''
+        i+=1
+    return l
+l=splitop(infix)
 print(l)
+for x in l:
+    if x[0]=='(':
+        print(splitop(x[1:-1]))
+    else:
+        print(splitop(x))
+     
+    
