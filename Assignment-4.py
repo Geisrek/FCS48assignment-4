@@ -175,19 +175,24 @@ while not PQueue.isEmpty():
      
                             
 #4
+class NumNode:
+    def __init__(self,Data,priority):
+        self.Data=Data
+        self.priority=priority
+        self.next=None
 class PriorityQueue:
     def __init__(self):
         self.head=None
     def isEmpty(self):
         return self.head==None
-    def enQueue(self,item):
-        new_item=Node(item)
-        if self.isEmpty() or new_item.Data>self.head.Data:
+    def enQueue(self,item,priority):
+        new_item=NumNode(item,priority)
+        if self.isEmpty() or new_item.priority>self.head.priority:
             new_item.next=self.head
             self.head=new_item
         else:
             current=self.head
-            while current.next and current.next.Data>=new_item.Data:
+            while current.next and current.next.priority>=new_item.priority:
                 current=current.next
             new_item.next=current.next
             current.next=new_item
@@ -198,11 +203,11 @@ class PriorityQueue:
             return output
         return
 PQ=PriorityQueue()
-PQ.enQueue(3)
-PQ.enQueue(1)
-PQ.enQueue(-3)
-PQ.enQueue(10)
-PQ.enQueue(0)
+PQ.enQueue(3,10)
+PQ.enQueue(1,11)
+PQ.enQueue(-3,1)
+PQ.enQueue(10,9)
+PQ.enQueue(0,5)
 while not PQ.isEmpty():
     print(PQ.deQueue())
                 
