@@ -201,23 +201,23 @@ class PriorityQueue:
             output=self.head.Data
             self.head=self.head.next
             return output
-        return
-PQ=PriorityQueue()
+        return 
+"""PQ=PriorityQueue()
 PQ.enQueue(3,10)
 PQ.enQueue(1,11)
 PQ.enQueue(-3,1)
 PQ.enQueue(10,9)
 PQ.enQueue(0,5)
 while not PQ.isEmpty():
-    print(PQ.deQueue())
+    print(PQ.deQueue())"""
                 
 def Calculate(n1,op,n2):
     if not (n1+n2).isalnum():
-        return
+        return''
     if op=="*":
         return eval(n1)*eval(n2)
     elif op=="/":
-        return eval(n1)/eval(n2)
+        return eval(n1)//eval(n2)
     elif op=="+":
         return eval(n1)+eval(n2)
     elif op=="-":
@@ -225,18 +225,18 @@ def Calculate(n1,op,n2):
     else:
         print("This operation is not exist")
         return -1
-print(Calculate('7', "+", '2'))
-infix="1+(3*(4/2))+1+(2*7)*(10/(2-2))"
+#print(Calculate('7', "+", '2'))
+infix="1+(3*(4/2))+1+(2*7)*(10/(2-3))"
 
 bracket="(1+(2*2)/(1+1)*1)"
 operations=bracket.split(")")
 
-print(operations)
+#print(operations)
 def getLastOne(s):
     if s.find('(')==-1 and s.find(')'):
         return s
     return getLastOne(s[1:-1])
-print(getLastOne(bracket))
+#print(getLastOne(bracket))
 def splitop(infix):
     i=0
     count=0
@@ -255,12 +255,74 @@ def splitop(infix):
             st=''
         i+=1
     return l
-l=splitop(infix)
-print(l)
-for x in l:
-    if x[0]=='(':
-        print(splitop(x[1:-1]))
+def opp(s,nque,oque):
+    op_values={'(':6,')':-6,'*':5,'/':4,'+':3,'-':2}
+    i=0
+    state=1
+    anyrhink=0
+    priority=0
+    prev_prio=0
+    st=''
+    while i<len(s):
+        #print(s[i],priority,state,st)
+        if s[i].isdigit():
+            st+=s[i]
+        else:
+           if s[i] in op_values:
+               if not s[i]=='('and not s[i]==')' :
+                   state=op_values[s[i]]+ anyrhink
+                   priority=state
+                   #print(st)
+                   
+                   nque.enQueue(st,max(priority, prev_prio))
+                   oque.enQueue(s[i],priority)
+                   #print(s[i],op_values[s[i]]+prev_prio)
+                   st=''
+                   prev_prio=priority
+               elif s[i]=='(':
+                    anyrhink+=op_values[s[i]]
+               elif s[i]==')':
+                   if st!='':
+                     nque.enQueue(st,max(priority, prev_prio))
+                   st=''
+                   anyrhink+=op_values[s[i]]
+                   
+
+        i+=1
+print(infix)
+nque=PriorityQueue()
+oque=PriorityQueue()
+opp("(2*(7+1)+(2*2))",nque,oque)
+"""while not nque.isEmpty():
+    print(nque.deQueue(),end='')
+print()
+while not oque.isEmpty():
+    print(oque.deQueue(),end='')"""
+oper=''
+prev=''
+result=0
+while not nque.isEmpty()  :
+    num=nque.deQueue()
+    if not oque.isEmpty():
+      oper=num+oque.deQueue()
+      
     else:
-        print(splitop(x))
-     
+        oper=num
+    
+    prev+=oper
+    print('-',prev)
+    if len(prev)==3:
+        print(prev[0],prev[1],prev[2])
+        result=Calculate(prev[0],prev[1],prev[2])
+        print('>',prev[-1])
+        prev=str(result)
+        print('=',prev)
+    elif len(prev)>3:
+        out=prev[:3]
+        print('->',out)
+        result=Calculate(prev[0],prev[1],prev[2])
+        print(result)
+        prev=str(result)+prev[3:]
+print(prev)
+        
     
