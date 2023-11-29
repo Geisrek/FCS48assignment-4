@@ -23,18 +23,44 @@ class LinkedList:
                 current=current.next
             current.next=Node(val)
     def delete(self,item):
-        current=self.head
-        priv=None
-        while current!=None :
-            if current.Data==item:
-                priv.next=current.next
+        if self.isEmpty():
+            return
+        elif self.head.Data==item:
+            self.head=self.head.next
+        else:
+            current=self.head
             priv=current
-            current=current.next
+            while current!=None :
+                if current.Data==item:
+                    priv.next=current.next
+                    
+                priv=current
+                current=current.next
     def displayList(self):
         current=self.head
         while current!=None:
             print(current.Data)
             current=current.next
+def singlyLinkedList(lst):
+    choise=input('a. Add Node\nb. Display Nodes\nc. Search for & Delete Node\nd. Return to main menu:')
+    if choise=='a':
+       node=int(input("input a numerical value:"))
+       lst.add(node)
+       singlyLinkedList(lst)
+    elif choise=='b':
+        lst.displayList()
+        singlyLinkedList(lst)
+    elif choise=='c':
+        item=int(input("input a numerical value to search & delet:"))
+        lst.delete(item)
+        singlyLinkedList(lst)
+    elif choise=='d':
+        return
+    else:
+        print('Wrong paramiter')
+        singlyLinkedList(lst)
+Linked_List=LinkedList()
+singlyLinkedList(Linked_List)
 """link=LinkedList()
 link.add(1)
 link.add(2)
@@ -226,10 +252,10 @@ def Calculate(n1,op,n2):
         print("This operation is not exist")
         return -1
 #print(Calculate('7', "+", '2'))
-infix="1+(3*(4/2))+1+(2*7)*(10/(2-3))"
+#infix="((3+6)-7)*(4/2)"
 
-bracket="(1+(2*2)/(1+1)*1)"
-operations=bracket.split(")")
+#bracket="1+(2*2)/(1+1)*1"
+#operations=bracket.split(")")
 
 #print(operations)
 def getLastOne(s):
@@ -289,40 +315,162 @@ def opp(s,nque,oque):
                    
 
         i+=1
-print(infix)
-nque=PriorityQueue()
-oque=PriorityQueue()
-opp("(2*(7+1)+(2*2))",nque,oque)
-"""while not nque.isEmpty():
-    print(nque.deQueue(),end='')
-print()
-while not oque.isEmpty():
-    print(oque.deQueue(),end='')"""
-oper=''
-prev=''
-result=0
-while not nque.isEmpty()  :
-    num=nque.deQueue()
-    if not oque.isEmpty():
-      oper=num+oque.deQueue()
+#print(splitop(infix))
+def executeOp(infix):
+    ops=splitop(infix)
+    S=''
+    lst=[]
+    for o in ops:
+      lst.append(o)
       
-    else:
-        oper=num
+      if not "(" in o:
+            S+=o
+            lst[len(lst)-1]=o
+            
+      elif "(" in o:
+            nque=PriorityQueue()
+            oque=PriorityQueue()
+            opp(o,nque,oque)
+            oper=''
+            prev=''
+            result=0
+            while not nque.isEmpty()  :
+                num=nque.deQueue()
+                if not oque.isEmpty():
+                  oper=num+oque.deQueue()
+                  
+                  
+                else:
+                    oper=num
+                
+                prev+=oper
+                #print('-',prev)
+                
+                if len(prev)>=3:
+                    n=''
+                    n2=''
+                    s=''
+                    
+                    j=0
+                    #print(prev)
+                    while j<len(prev) and prev[j].isnumeric():
+                        #print(prev)
+                        n+=prev[j]
+                        j+=1
+                        if not prev[j].isnumeric():
+                            s=prev[j]
+                    i=j+1
+                    while i<len(prev) and prev[i].isnumeric():
+                        n2+=prev[i]
+                        i+=1
+                    out=prev[:2]
+                    #print('->',n,s,n2)
+                    result=Calculate(n,s,n2)
+                    #print(result)
+                    prev=str(result)+prev[i:]
+                    lst[len(lst)-1]=result
+                S=prev
+                #print(S,'<')
+    return lst
+                
+                
     
-    prev+=oper
-    print('-',prev)
-    if len(prev)==3:
-        print(prev[0],prev[1],prev[2])
-        result=Calculate(prev[0],prev[1],prev[2])
-        print('>',prev[-1])
-        prev=str(result)
-        print('=',prev)
-    elif len(prev)>3:
-        out=prev[:3]
-        print('->',out)
-        result=Calculate(prev[0],prev[1],prev[2])
-        print(result)
-        prev=str(result)+prev[3:]
-print(prev)
+def Calculator(infix):
+    operat=executeOp(infix)
+    #print(operat)
+    st=operat[0]
+    for x in range(0,len(operat),2):
+        if x<len(operat)-1:
+            #print(str(st), operat[x+1], str(operat[x+2]))
+            st=Calculate(str(st), operat[x+1], str(operat[x+2]))
         
+            #print(st)
+    return st
+
+#print(Calculator("((3+6)-7)*(4/2)"))
+class Graph:
+    def __init__(self):
+        self.graph={}
+    def isEmpty(self):
+        return len(self.graph)==0
+    def add(self,new_vertex):
+        self.graph.update({new_vertex:LinkedList()})
+    def connectNodes(self,node,node_connect):
+        if node in self.graph and node_connect:
+            self.graph[node].add(node_connect)
+        else:
+            error=node if not node in self.graph else node_connect
+            raise Exception(f"This node '{error}' is not exist")
+    def removeEdge(self,node,node2):
+        if node in self.graph and node2 in self.graph:
+            self.graph[node].delete(node2)
+            self.graph[node2].delete(node)
+        else:
+            error=node if not node in self.graph else node2
+            raise Exception(f"This node '{error}' is not exist")
+    #O(n)
+    def removeVertex(self,node):
+        if node in self.graph:
+            self.graph.pop(node)
+            for x in self.graph:
+                self.graph[x].delete(node)
+                #O(n^2)
+        else:
+            raise Exception(f"This node '{node}' is not exist")
+    def displayGraph(self,degree):
+        if not degree in self.graph:
+            raise Exception(f"This node '{degree}' is not exist")
+        else:
+            visited=list(self.graph.keys())
+            
+            Que=Queue()
+            Que.enqueue(degree)
+            while len(visited)>0:
+                if Que.isEmpty():
+                    Que.enqueue(visited.pop(0))
+                else:
+                    vertex=Que.dequeue()
+                    
+                    if vertex in self.graph:
+                        
+                        vertex_List=self.graph.pop(vertex)
+                        if vertex in visited:
+                         visited.remove(vertex)
+                        current=vertex_List.head
+                        while current!=None:
+                                data=current.Data
+                                Que.enqueue(data)
+                                print(vertex,'->',data)
+                                current=current.next
+"""graph=Graph()
+graph.add(1)
+graph.add(2)
+graph.add(3)
+graph.add(4)
+graph.add(5)
+graph.add(6)
+graph.connectNodes(1, 3)
+graph.connectNodes(2, 3) 
+graph.connectNodes(2, 4)    
+graph.connectNodes(3, 1)  
+graph.connectNodes(3, 2)
+graph.connectNodes(4, 1)
+graph.connectNodes(5, 6)
+graph.displayGraph(3)
+print("-------------------")
+graph.add(1)
+graph.add(2)
+graph.add(3)
+graph.add(4)
+graph.add(5)
+graph.add(6)
+graph.connectNodes(1, 3)
+graph.connectNodes(2, 3) 
+graph.connectNodes(2, 4)    
+graph.connectNodes(3, 1)  
+graph.connectNodes(3, 2)
+graph.connectNodes(4, 1)
+graph.connectNodes(5, 6)       
+graph.removeEdge(3,2)
+graph.displayGraph(3)"""
     
