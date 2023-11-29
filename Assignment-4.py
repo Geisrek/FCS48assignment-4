@@ -59,8 +59,8 @@ def singlyLinkedList(lst):
     else:
         print('Wrong paramiter')
         singlyLinkedList(lst)
-Linked_List=LinkedList()
-singlyLinkedList(Linked_List)
+#Linked_List=LinkedList()
+#singlyLinkedList(Linked_List)
 """link=LinkedList()
 link.add(1)
 link.add(2)
@@ -186,6 +186,26 @@ class PriorestyQueueStudents:
             self.head=self.head.next
             return f"{preve.name},{preve.final},{preve.midterm},{preve.personalety}"
         return
+def managingStudents(Qu):
+    choise = input('a. Add a student\nb. Interview a student\nc. Return to main menu:')
+    if choise=='a':
+        name=input('Enter name: ')
+        final=int(input('Enter Final Grade: '))
+        midterm=int(input('Enter Midterm Grade: '))
+        personalety=int(input('Enter 0 for bad personalety or any number for good one: '))>0
+        student=Student(name, final, midterm, personalety)
+        Qu.enQueue(student)
+        managingStudents( Qu)
+    elif choise=='b':
+        print(Qu.deQueue())
+        managingStudents(Qu)
+    elif choise=='c':
+        return
+    else:
+        print("wrong paramiter ")
+        managingStudents(Qu)
+        
+    
             
 """PQueue=PriorestyQueueStudents()
 
@@ -318,6 +338,7 @@ def opp(s,nque,oque):
 #print(splitop(infix))
 def executeOp(infix):
     ops=splitop(infix)
+    #print(ops)
     S=''
     lst=[]
     for o in ops:
@@ -363,21 +384,31 @@ def executeOp(infix):
                     while i<len(prev) and prev[i].isnumeric():
                         n2+=prev[i]
                         i+=1
-                    out=prev[:2]
-                    #print('->',n,s,n2)
-                    result=Calculate(n,s,n2)
-                    #print(result)
-                    prev=str(result)+prev[i:]
-                    lst[len(lst)-1]=result
+                    if n !='' and n2!='':
+                        print('->',n,s,n2)
+                        result=Calculate(n,s,n2)
+                        #print(result)
+                        prev=str(result)+prev[i:]
+                        lst[len(lst)-1]=result
                 S=prev
                 #print(S,'<')
     return lst
                 
                 
-    
+def checkExepretions(exepretion):
+    operators='+-*/()'
+    open_brackets=exepretion.count("(")
+    close_brackets=exepretion.count(")")
+    if open_brackets==close_brackets:
+        for item in exepretion:
+            if not item.isnumeric() and not item in operators:
+                return False
+    else:
+        return False
+    return True
 def Calculator(infix):
     operat=executeOp(infix)
-    #print(operat)
+    print(operat)
     st=operat[0]
     for x in range(0,len(operat),2):
         if x<len(operat)-1:
@@ -388,6 +419,7 @@ def Calculator(infix):
     return st
 
 #print(Calculator("((3+6)-7)*(4/2)"))
+#Q5
 class Graph:
     def __init__(self):
         self.graph={}
@@ -415,6 +447,7 @@ class Graph:
             for x in self.graph:
                 self.graph[x].delete(node)
                 #O(n^2)
+            print(f"Vertex {node} removed succesfully")
         else:
             raise Exception(f"This node '{node}' is not exist")
     def displayGraph(self,degree):
@@ -442,6 +475,39 @@ class Graph:
                                 Que.enqueue(data)
                                 print(vertex,'->',data)
                                 current=current.next
+def graphManager(graph):
+    choise=input("a. Add vertex\nb. Add edge\nc. Remove vertex\nd. Remove edge\ne. Display vertices with a degree of X or more.\nf. Return to main menu:")
+    if choise=='a':
+     value=int(input("Enter the vertex name:"))
+     graph.add(value)
+     graphManager(graph)
+    elif choise=='b':
+        vertex=int(input('Enter the vertex:'))
+        vertex_to_connect=int(input('Enter the vertex you want to connect withe:'))
+        graph.connectNodes(vertex,vertex_to_connect)
+        graphManager(graph)
+    elif choise=='c':
+        vertex=int(input("Enter vertex to remove:"))
+        graph.removeVertex(vertex)
+        graphManager(graph)
+    elif choise=='d':
+        vertex=int(input('Enter the vertex:'))
+        vertex2=int(input('Enter the vertex you want to remove the edge withe:'))
+        graph.removeEdge(vertex,vertex2)
+        graphManager(graph)
+    elif choise=='e':
+        degree=int(input('Enter the degree: '))
+        graph.displayGraph(degree)
+        graphManager(graph)
+    elif choise=='f':
+        return
+    else:
+        print("Wrong paramiter")
+        graphManager(graph)
+        
+        
+#graph=Graph()
+#graphManager(graph)
 """graph=Graph()
 graph.add(1)
 graph.add(2)
@@ -473,4 +539,47 @@ graph.connectNodes(4, 1)
 graph.connectNodes(5, 6)       
 graph.removeEdge(3,2)
 graph.displayGraph(3)"""
+def main():
+    choise=int(input('1. Singly Linked List\n2. Check if Palindrome\n3. Priority Queue\n4. Evaluate an Infix Expression\n5. Graph\n6. Exit:'))
+    if choise==1:
+        Linked_List=LinkedList()
+        singlyLinkedList(LinkedList())
+        main()
+    elif choise==2:
+        word=input('Enter a word:')
+        letters_list=list(word)
+        stack=Stack()
+        reversed_word=''
+        for letter in letters_list:
+            stack.add(letter)
+        while not stack.isEmpty():
+            reversed_word+=stack.POP()
+        print(reversed_word==word)
+        main()
+    elif choise==3:
+        PQueue=PriorestyQueueStudents()
+        managingStudents(PQueue)
+        main()
+    elif choise==4:
+        infix=input('Enter the exepretion:')
+        check_exepretion=checkExepretions(infix)
+        if check_exepretion:
+            print(Calculator(infix))
+        else:
+            print("Wrong exepretion")
+        main()
+    elif choise==5:
+        graph=Graph()
+        graphManager(graph)
+        main()
+    elif choise==6:
+        print("Good Bye")
+        return
+    else:
+        print("Wrong paramiter")
+        main()
+main()
+        
+        
+    
     
